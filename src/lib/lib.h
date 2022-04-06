@@ -6,21 +6,39 @@
 #include <cmath>
 #include <algorithm>
 
-
-class strongin{
-public:
-    using return_type = std::tuple<double, double, int>;
-    std::tuple<double, double, int> static eval(const std::function<double(double)>& function, double r, double a, double b, double eps);
+struct basic_item
+{
+};
+struct sofa
+{
 };
 
-class nestrongin{
+class Item
+{
 public:
-    double eval(double x, std::function<double(double)>& function, double r, double a, double b) {return x;};
+  Item() {};
+  virtual std::string item_name() = 0;
+  virtual ~Item() {};
 };
 
-template<typename type> class matopt{
+class Sofa : public Item
+{
 public:
-    template<typename... Args> static typename type::return_type get(Args... args){
-        return type::eval(args...);
-    }
+  virtual std::string item_name() override { return "Sofa"; }
+};
+
+class Factory
+{
+public:
+  Factory() {};
+  virtual Item* Produce() = 0;
+  virtual ~Factory() {};
+};
+
+class SofaFactory : public Factory
+{
+public:
+  SofaFactory() {};
+  Item* Produce() {return new Sofa;};
+  ~SofaFactory() {};
 };
